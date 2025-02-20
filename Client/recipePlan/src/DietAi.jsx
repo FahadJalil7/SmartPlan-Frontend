@@ -32,13 +32,14 @@ const Chat = () => {
 
       const response = await Aichat({messages:input});
       if (response){setLoading(false)}
-      console.log("response to the function wit erthing",response)
-      // Add AI's response to chat
-      const aiMessage = { role: "assistant", content: response[0]};
-      setMessages((prev) => [...prev, aiMessage]);
-      setRecipes([...response[1].data]);
-      
-
+      if (response.length == 2){
+        console.log("response to the function wit erthing",response)
+        // Add AI's response to chat
+        const aiMessage = { role: "assistant", content: response[0]};
+        setMessages((prev) => [...prev, aiMessage]);
+        setRecipes([...response[1].data]);
+      }else{setMessages((prev) => [...prev,  {role: "assistant", content: response[0]}   ]);}
+    
     } catch (error) {
       console.error("Error:", error);
     }

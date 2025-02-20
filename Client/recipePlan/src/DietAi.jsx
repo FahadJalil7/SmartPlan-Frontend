@@ -3,6 +3,8 @@ import axios from "axios";
 import {LinearProgress} from "@mui/material";
 import { Aichat } from "./utiltyFunctions/AiChat";
 import { availableRecipeContext } from "./App";
+import { blue } from "@mui/material/colors";
+import {Typography} from "@mui/material";
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
@@ -56,7 +58,7 @@ const Chat = () => {
       <div style={styles.chatBox}>
         {messages.map((msg, index) => (
           <div key={index} style={msg.role === "user" ? styles.userMsg : styles.aiMsg}>
-            {msg.content}
+            <Typography component={"h1"} sx={{color:'black'}}>{msg.content}</Typography>
           </div>
         ))}
       </div>
@@ -78,9 +80,9 @@ const Chat = () => {
 
 // Inline styles for basic styling
 const styles = {
-  container: { maxWidth: "600px", margin: "auto", padding: "20px", textAlign: "center" },
-  chatBox: { border: "1px solid #ddd", padding: "10px", minHeight: "300px", overflowY: "auto" },
-  userMsg: { background: "#DCF8C6", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "right" },
+  container: { maxWidth: "500px", margin: "auto", padding: "20px", textAlign: "center", },
+  chatBox: { border: "1px solid #ddd", padding: "10px", minHeight: "150px", overflowY: "auto" },
+  userMsg: { background: "#DCF8C6", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "right"},
   aiMsg: { background: "#E8E8E8", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "left" },
   inputBox: { display: "flex", marginTop: "10px" },
   input: { flex: 1, padding: "10px", border: "1px solid #ddd", borderRadius: "5px" },

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
-import { Box, TextField } from '@mui/material';
+import { Box, TextField, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack'
 import RecipeCard from './recipeCard';
 import MealPlanner from './imp2/mealplanner';
@@ -65,20 +65,29 @@ function App() {
     <MealContext.Provider value={[mealPlan,setMealPlan]}>
     <availableRecipeContext.Provider value={[recipes,setRecipes]}>
       <ThemeProvider theme={darkTheme}>
-        <CssBaseline></CssBaseline>
-      <Box sx={{display:'flex',flexDirection:'row'}}>
-      <HandleShoppingList recipesList={recipes}></HandleShoppingList>
-      <Button variant='outlined' onClick={()=>handleShuffle()}>Shuffle Recipes</Button>
-      <TextField id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(Searchquery),SetSearchquery(event.target.value)}}/>
-      <Button variant='outlined' onClick={()=>handleRandomFill()}>Fill Mealplan</Button>
+      <CssBaseline></CssBaseline>
+      <Box sx={{display:'flex',flexDirection:'row',justifyContent:"space-between", margin:"10px"}}>
+        <Typography variant="h4" component={"h4"}> MealPanner</Typography>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center"sx={{ maxWidth: 800 }}>
+          <HandleShoppingList recipesList={recipes}></HandleShoppingList>
+          <Button variant='outlined' onClick={()=>handleShuffle()}>Shuffle Recipes</Button>
+          <TextField id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(Searchquery),SetSearchquery(event.target.value)}}/>
+          <Button variant='outlined' onClick={()=>handleRandomFill()}>Fill Mealplan</Button>
+        </Stack> 
+      </Box>
+      <Box>
+      <Chat></Chat>
+      <WeeklySummary></WeeklySummary>
       </Box>
       <MealPlanner recipeList={recipes}></MealPlanner>
-      <WeeklySummary></WeeklySummary>
-      <Chat></Chat>
       </ThemeProvider>
     </availableRecipeContext.Provider> 
     </MealContext.Provider>
   )
+
+
+
+  
 
 
 }

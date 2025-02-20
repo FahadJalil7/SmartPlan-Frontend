@@ -7,7 +7,18 @@ import { Box, CardActionArea, CardContent, CardHeader, CardMedia, Modal } from "
 
 const RecipeCard = ({ recipe,id }) => {
   const [open,setOpen] = useState(false);
-
+  const modalStyle = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    minWidth: '100vh',
+    minHeight: '70vh',
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
   return (
     <>
      <Card sx={{ maxWidth:150,maxHeight: 155,  }}>
@@ -19,8 +30,8 @@ const RecipeCard = ({ recipe,id }) => {
       </CardActionArea>
     </Card>
     <Modal open={open} onClose={()=>setOpen(false)}>
-      <Card>
-        
+      <Card style={modalStyle}>
+        <Typography variant="subtitle2" component={"div"} gutterBottom>{recipe.title}</Typography>
       </Card>
     </Modal>
     </>

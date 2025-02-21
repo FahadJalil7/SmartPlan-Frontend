@@ -36,45 +36,42 @@ function App() {
 
   const handleShuffle = async function(){
     if(userSetting){
-      const data  = await SearchRecipesByIng(10,50,50,50)
-      setRecipes([...data])
-      console.log("Shuffle results:",data)
-      
+      var data  = await SearchRecipesByIng(5,50,50,50);   
     }else{
-      const data  = await fetchRandomRecipes(10)
+      var data  = await fetchRandomRecipes(5);
+    }
       setRecipes([...data])
       console.log("Shuffle results:",data)
-    }
+    
   }
 
   const handleSearch = async function(Searchquery){
     if(userSetting){
-
+      var data = await SearchRecipesByIng(5,50,50,50);// this needs to have search query somehow
     }else{
-      const data = await SearchRecipes(10,Searchquery)
-      setRecipes([...data])
-      console.log("Search results",data)
+      var data = await SearchRecipes(5,Searchquery);
     }
+    setRecipes([...data])
+    console.log("Search results",data)
   }
 
   const handleRandomFill = async function(){
-
     if(userSetting){
-
+      var data = await SearchRecipesByIng(21,50,50,50)
     }else{
-      const data = await fetchRandomRecipes(21);
-      const temparr = [...data]; 
-      setMealPlan((prev)=>{
-        const plan = [...prev]; //i think this is unnessacery since we overwite anyway 
-        for(let i=0;i<7;i++){
-          plan[i].breakfast = temparr[3*i]; 
-          plan[i].lunch = temparr[3*i+1];
-          plan[i].dinner = temparr[3*i+2];
-          //complety overwrites the current mealplan, conversly we couldve just checked if plan[i] is filled before setting it
-        }
-        return plan;
-      });
+       var data = await fetchRandomRecipes(21);
     }
+    const temparr = [...data]; 
+    setMealPlan((prev)=>{
+      const plan = [...prev]; //i think this is unnessacery since we overwite anyway 
+      for(let i=0;i<7;i++){
+        plan[i].breakfast = temparr[3*i]; 
+        plan[i].lunch = temparr[3*i+1];
+        plan[i].dinner = temparr[3*i+2];
+        //complety overwrites the current mealplan, conversly we couldve just checked if plan[i] is filled before setting it
+      }
+      return plan;
+    });
   }
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, TextField, Typography, ToggleButton } from '@mui/material';
 import Stack from '@mui/material/Stack'
 import RecipeCard from './recipeCard';
 import MealPlanner from './imp2/mealplanner';
@@ -11,6 +11,7 @@ import WeeklySummary from './WeeklySummary';
 import Chat from './DietAi';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { SearchRecipesByIng } from './utiltyFunctions/SearchRecipesByIng';
 
 const darkTheme = createTheme({
   palette: {
@@ -30,35 +31,50 @@ function App() {
       }))
     );
   const [Searchquery,SetSearchquery] = useState("");
+  const [userSetting,setUserSetting] = useState(false);
    
 
   const handleShuffle = async function(){
-    const data  = await fetchRandomRecipes(10)
-    setRecipes([...data])
-    console.log("Shuffle results:",data)
-
+    if(userSetting){
+      const data  = await SearchRecipesByIng(10,50,50,50)
+      setRecipes([...data])
+      console.log("Shuffle results:",data)
+      
+    }else{
+      const data  = await fetchRandomRecipes(10)
+      setRecipes([...data])
+      console.log("Shuffle results:",data)
+    }
   }
 
   const handleSearch = async function(Searchquery){
-    const data = await SearchRecipes(10,Searchquery)
-    setRecipes([...data])
-    console.log("Search results",data)
+    if(userSetting){
 
+    }else{
+      const data = await SearchRecipes(10,Searchquery)
+      setRecipes([...data])
+      console.log("Search results",data)
+    }
   }
 
   const handleRandomFill = async function(){
-    const data = await fetchRandomRecipes(21);
-    const temparr = [...data]; 
-    setMealPlan((prev)=>{
-      const plan = [...prev];
-      for(let i=0;i<7;i++){
-        plan[i].breakfast = temparr[3*i];
-        plan[i].lunch = temparr[3*i+1];
-        plan[i].dinner = temparr[3*i+2];
-        //complety overwrites the current mealplan
-      }
-      return plan;
-    });
+
+    if(userSetting){
+
+    }else{
+      const data = await fetchRandomRecipes(21);
+      const temparr = [...data]; 
+      setMealPlan((prev)=>{
+        const plan = [...prev]; //i think this is unnessacery since we overwite anyway 
+        for(let i=0;i<7;i++){
+          plan[i].breakfast = temparr[3*i]; 
+          plan[i].lunch = temparr[3*i+1];
+          plan[i].dinner = temparr[3*i+2];
+          //complety overwrites the current mealplan, conversly we couldve just checked if plan[i] is filled before setting it
+        }
+        return plan;
+      });
+    }
   }
 
   return (
@@ -69,6 +85,7 @@ function App() {
       <Box sx={{display:'flex',flexDirection:'row',justifyContent:"space-between", margin:"10px"}}>
         <Typography variant="h4" component={"h4"}> MealPanner</Typography>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center"sx={{ maxWidth: 800 }}>
+          <ToggleButton selected={!userSetting} onChange={() => setUserSetting((prev) => !prev)}>Random</ToggleButton>
           <HandleShoppingList recipesList={recipes}></HandleShoppingList>
           <Button variant='outlined' onClick={()=>handleShuffle()}>Shuffle Recipes</Button>
           <TextField id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(Searchquery),SetSearchquery(event.target.value)}}/>

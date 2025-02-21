@@ -32,11 +32,13 @@ function App() {
     );
   const [Searchquery,SetSearchquery] = useState("");
   const [userSetting,setUserSetting] = useState(false);
-   
+  const [minCalories,setMinCalories] = useState(0);
+  const [minCarbs,setMinCarbs] = useState(0);
+  const [minProtein,setMinProtien] = useState(0)
 
   const handleShuffle = async function(){
     if(userSetting){
-      var data  = await SearchRecipesByIng(5,50,50,50);   
+      var data  = await SearchRecipesByIng(5,minCalories,minCarbs,minProtein);   
     }else{
       var data  = await fetchRandomRecipes(5);
     }
@@ -47,7 +49,7 @@ function App() {
 
   const handleSearch = async function(Searchquery){
     if(userSetting){
-      var data = await SearchRecipesByIng(5,50,50,50);// this needs to have search query somehow
+      var data = await SearchRecipesByIng(5,minCalories,minCarbs,minProtein);// this needs to have search query somehow
     }else{
       var data = await SearchRecipes(5,Searchquery);
     }
@@ -57,7 +59,7 @@ function App() {
 
   const handleRandomFill = async function(){
     if(userSetting){
-      var data = await SearchRecipesByIng(21,50,50,50)
+      var data = await SearchRecipesByIng(21,minCalories,minCarbs,minProtein);
     }else{
        var data = await fetchRandomRecipes(21);
     }
@@ -82,10 +84,13 @@ function App() {
       <Box sx={{display:'flex',flexDirection:'row',justifyContent:"space-between", margin:"10px"}}>
         <Typography variant="h4" component={"h4"}> MealPanner</Typography>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center"sx={{ maxWidth: 800 }}>
+          <TextField disabled={!userSetting} type='number' label="calories"></TextField>
+          <TextField disabled={!userSetting} type='number' label='protien'></TextField>
+          <TextField disabled={!userSetting} type='number' label='carbs'></TextField>
           <ToggleButton selected={!userSetting} onChange={() => setUserSetting((prev) => !prev)}>Random</ToggleButton>
           <HandleShoppingList recipesList={recipes}></HandleShoppingList>
           <Button variant='outlined' onClick={()=>handleShuffle()}>Shuffle Recipes</Button>
-          <TextField id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(Searchquery),SetSearchquery(event.target.value)}}/>
+          <TextField type='search' id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(Searchquery),SetSearchquery(event.target.value)}}/>
           <Button variant='outlined' onClick={()=>handleRandomFill()}>Fill Mealplan</Button>
         </Stack> 
       </Box>

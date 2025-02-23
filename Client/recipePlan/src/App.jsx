@@ -34,7 +34,7 @@ function App() {
   const [userSetting,setUserSetting] = useState(false);
   const [minCalories,setMinCalories] = useState(0);
   const [minCarbs,setMinCarbs] = useState(0);
-  const [minProtein,setMinProtien] = useState(0)
+  const [minProtein,setMinProtien] = useState(0);
 
   const handleShuffle = async function(){
     if(userSetting){
@@ -84,9 +84,9 @@ function App() {
       <Box sx={{display:'flex',flexDirection:'row',justifyContent:"space-between", margin:"10px"}}>
         <Typography variant="h4" component={"h4"}> MealPanner</Typography>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center"sx={{ maxWidth: 800 }}>
-          <TextField disabled={!userSetting} type='number' label="calories"></TextField>
-          <TextField disabled={!userSetting} type='number' label='protien'></TextField>
-          <TextField disabled={!userSetting} type='number' label='carbs'></TextField>
+          <TextField onChange={(e)=>{setMinCalories(e.target.value)}} value={minCalories} disabled={!userSetting} type='number' label="calories"></TextField>
+          <TextField onChange={(e)=>{setMinProtien(e.target.value)}} value={minProtein} disabled={!userSetting} type='number' label='protien'></TextField>
+          <TextField onChange={(e)=>{setMinCarbs(e.target.value)}} value={minCarbs} disabled={!userSetting} type='number' label='carbs'></TextField>
           <ToggleButton selected={!userSetting} onChange={() => setUserSetting((prev) => !prev)}>Random</ToggleButton>
           <HandleShoppingList recipesList={recipes}></HandleShoppingList>
           <Button variant='outlined' onClick={()=>handleShuffle()}>Shuffle Recipes</Button>
@@ -95,7 +95,7 @@ function App() {
         </Stack> 
       </Box>
       <Box>
-      <Chat></Chat>
+      <Chat setMinCalories={setMinCalories} setMinCarbs={setMinCarbs} setMinProtein={setMinProtien}></Chat>
       <WeeklySummary></WeeklySummary>
       </Box>
       <MealPlanner recipeList={recipes}></MealPlanner>

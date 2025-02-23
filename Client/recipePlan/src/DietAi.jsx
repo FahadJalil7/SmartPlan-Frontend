@@ -6,7 +6,7 @@ import { availableRecipeContext } from "./App";
 import { blue } from "@mui/material/colors";
 import {Typography} from "@mui/material";
 
-const Chat = () => {
+const Chat = ({setMinCalories,setMinCarbs,setMinProtein}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading,setLoading] = useState(false);
@@ -32,12 +32,15 @@ const Chat = () => {
 
       const response = await Aichat({messages:input});
       if (response){setLoading(false)}
-      if (response.length == 2){
+      if (response.length>2){
         console.log("response to the function wit erthing",response)
         // Add AI's response to chat
         const aiMessage = { role: "assistant", content: response[0]};
         setMessages((prev) => [...prev, aiMessage]);
         setRecipes([...response[1].data]);
+        setMinCalories(response[2]);
+        setMinCarbs(response[3]);
+        setMinProtein(response[4]);
       }else{setMessages((prev) => [...prev,  {role: "assistant", content: response[0]}   ]);}
     
     } catch (error) {

@@ -74,6 +74,7 @@ function App() {
       }
       return plan;
     });
+    console.log("mealplan after fill",mealPlan)
   }
 
   return (
@@ -95,7 +96,7 @@ function App() {
         </Stack> 
       </Box>
       <Box>
-      <Chat setMinCalories={setMinCalories} setMinCarbs={setMinCarbs} setMinProtein={setMinProtien}></Chat>
+      <Chat setMinCalories={setMinCalories} setMinCarbs={setMinCarbs} setMinProtein={setMinProtien} setUserSetting={setUserSetting}></Chat>
       <WeeklySummary></WeeklySummary>
       </Box>
       <MealPlanner recipeList={recipes}></MealPlanner>

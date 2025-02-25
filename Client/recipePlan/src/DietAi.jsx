@@ -6,7 +6,7 @@ import { availableRecipeContext } from "./App";
 import { blue } from "@mui/material/colors";
 import {Typography} from "@mui/material";
 
-const Chat = ({setMinCalories,setMinCarbs,setMinProtein}) => {
+const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading,setLoading] = useState(false);
@@ -41,6 +41,7 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein}) => {
         setMinCalories(response[2]);
         setMinCarbs(response[3]);
         setMinProtein(response[4]);
+        setUserSetting(true);
       }else{setMessages((prev) => [...prev,  {role: "assistant", content: response[0]}   ]);}
     
     } catch (error) {

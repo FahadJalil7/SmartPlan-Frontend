@@ -1,0 +1,98 @@
+[
+    {
+      "breakfast": {
+        "id": 1,
+        "title": "Oatmeal with Berries",
+        "ingredients": [
+          { "name": "Oats", "amount": 50, "unit": "g" },
+          { "name": "Milk", "amount": 200, "unit": "ml" },
+          { "name": "Blueberries", "amount": 30, "unit": "g" }
+        ],
+        "link": "https://example.com/oatmeal",
+        "image": "https://example.com/oatmeal.jpg",
+        "calories": 250,
+        "fat": 5,
+        "carbs": 45,
+        "protein": 8
+      },
+      "lunch": {
+        "id": 2,
+        "title": "Grilled Chicken Salad",
+        "ingredients": [
+          { "name": "Chicken Breast", "amount": 150, "unit": "g" },
+          { "name": "Lettuce", "amount": 50, "unit": "g" },
+          { "name": "Tomatoes", "amount": 40, "unit": "g" }
+        ],
+        "link": "https://example.com/salad",
+        "image": "https://example.com/salad.jpg",
+        "calories": 350,
+        "fat": 10,
+        "carbs": 20,
+        "protein": 40
+      },
+      "dinner": {
+        "id": 3,
+        "title": "Salmon with Rice",
+        "ingredients": [
+          { "name": "Salmon", "amount": 200, "unit": "g" },
+          { "name": "Rice", "amount": 100, "unit": "g" },
+          { "name": "Broccoli", "amount": 50, "unit": "g" }
+        ],
+        "link": "https://example.com/salmon-rice",
+        "image": "https://example.com/salmon.jpg",
+        "calories": 500,
+        "fat": 20,
+        "carbs": 50,
+        "protein": 45
+      }
+    },
+    {
+        "breakfast": {
+        "id": 4,
+        "title": "Oatmeal with Berries",
+        "ingredients": [
+          { "name": "Oats", "amount": 50, "unit": "g" },
+          { "name": "Milk", "amount": 200, "unit": "ml" },
+          { "name": "Blueberries", "amount": 30, "unit": "g" }
+        ],
+        "link": "https://example.com/oatmeal",
+        "image": "https://example.com/oatmeal.jpg",
+        "calories": 250,
+        "fat": 5,
+        "carbs": 45,
+        "protein": 8
+      },
+      "lunch": {
+        "id": 5,
+        "title": "Grilled Chicken Salad",
+        "ingredients": [
+          { "name": "Chicken Breast", "amount": 150, "unit": "g" },
+          { "name": "Lettuce", "amount": 50, "unit": "g" },
+          { "name": "Tomatoes", "amount": 40, "unit": "g" }
+        ],
+        "link": "https://example.com/salad",
+        "image": "https://example.com/salad.jpg",
+        "calories": 350,
+        "fat": 10,
+        "carbs": 20,
+        "protein": 40
+      },
+      "dinner": {
+        "id": 6,
+        "title": "Salmon with Rice",
+        "ingredients": [
+          { "name": "Salmon", "amount": 200, "unit": "g" },
+          { "name": "Rice", "amount": 100, "unit": "g" },
+          { "name": "Broccoli", "amount": 50, "unit": "g" }
+        ],
+        "link": "https://example.com/salmon-rice",
+        "image": "https://example.com/salmon.jpg",
+        "calories": 500,
+        "fat": 20,
+        "carbs": 50,
+        "protein": 45
+      }
+
+    }
+  ]
+  

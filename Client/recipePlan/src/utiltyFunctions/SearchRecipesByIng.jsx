@@ -1,10 +1,12 @@
 import axios from "axios";
+import { getRecipeInfoBulk } from "./getRecipeInfoBulk";
 
 
 export const SearchRecipesByIng = async(number=5,minCalories,minCarbs,minProtein) =>{
+    console.log("test 1");
 
     try{
-        const response = await axios.get("http://localhost:5000/api/recipes/findByNutrients",{
+        const response = await axios.get("https://smartplan-backend.onrender.com/api/recipes/findByNutrients",{
             params:{
                 number,
                 minCalories,
@@ -13,13 +15,12 @@ export const SearchRecipesByIng = async(number=5,minCalories,minCarbs,minProtein
             }
             });
     
-        console.log("result of searchRecipeByIng: ", response);
-        return(response.data);
+        return response.data
 
     }
     catch(error){
-        console.log("SearchRecipesByIng rand into this Error:", error );
-        return("error")
+        console.log("SearchRecipesByIng ran into this Error:", error);
+        throw ("error")
     }
 
 

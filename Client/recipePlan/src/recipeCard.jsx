@@ -4,6 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { Box, CardActionArea, CardContent, CardHeader, CardMedia, Modal } from "@mui/material";
+import ExpandedRecipeCard from "./RecipeCardExpanded";
 
 const RecipeCard = ({ recipe,id }) => {
   const [open,setOpen] = useState(false);
@@ -29,10 +30,8 @@ const RecipeCard = ({ recipe,id }) => {
         </CardContent>
       </CardActionArea>
     </Card>
-    <Modal open={open} onClose={()=>setOpen(false)}>
-      <Card style={modalStyle}>
-        <Typography variant="subtitle2" component={"div"} gutterBottom>{recipe.title}</Typography>
-      </Card>
+    <Modal sx={{paddingBlock:2}} open={open} onClose={()=>setOpen(false)}>
+      <ExpandedRecipeCard recipe={recipe}/>
     </Modal>
     </>
   );

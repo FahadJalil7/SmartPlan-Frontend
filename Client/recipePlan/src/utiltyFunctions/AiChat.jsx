@@ -8,17 +8,14 @@ export const Aichat = async ({messages}) => {
 
     
         try{
-            const response = await axios.post("http://localhost:5000/api/diet/chat", {message: messages});
-            console.log("ai response",response)
+            const response = await axios.post("https://smartplan-backend.onrender.com/api/diet/chat", {message: messages});
             if(response.data[1] == 0){
                 const minCalories = response.data[0].minCalorie;
                 const minProtein = response.data[0].minProtein;
                 const minCarbs = response.data[0].minCarb;
                 const ing = response.data[0].includedIng;
                 
-        
-            
-                const res = await axios.get("http://localhost:5000/api/recipes/findByNutrients",{
+                const res = await axios.get("https://smartplan-backend.onrender.com/api/recipes/findByNutrients",{
                 params:{
                     number:5,
                     minCalories,
@@ -38,8 +35,8 @@ export const Aichat = async ({messages}) => {
             
     
         } catch(error){
-            console.log("ERROR:,", error)
-            return('some error at AI:')
+            console.log("ERROR at AiChat:,", error)
+            throw error
         }
     }
     

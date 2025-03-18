@@ -4,7 +4,7 @@ import { Grid2, Card, CardMedia,CardHeader, Typography, Box, CardActions, Icon, 
 import { Button } from "@mui/material";
 import RecipeCard from "../recipeCard";
 import { useEffect } from "react";
-import { MealContext } from "../App";
+import { LoadingContext, MealContext } from "../App";
 import { getRecipeInfo } from "../utiltyFunctions/getRecipeInfo";
 
 const RecipeCard2 = ({ recipe, id, onClick }) => {
@@ -12,8 +12,8 @@ const RecipeCard2 = ({ recipe, id, onClick }) => {
   const style = {
     transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     cursor: "grab",
-    maxWidth:200,
-    maxHeight:210,
+    maxWidth:150,
+    minHeight:180,
   };
 
   return (
@@ -39,13 +39,14 @@ const MealSlot = ({ id, recipe }) => {
         border: "1px dashed gray",
         borderRadius: 2,
         padding: 2,
-        minHeight: 80,
+        minHeight: 180,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: recipe ? "#f0f0f0" : "transparent",
       }}
     >
+      
       {recipe ? (
         //<Typography variant="body1">{recipe.name}</Typography>
         <RecipeCard id={recipe.id} recipe={recipe}></RecipeCard>
@@ -58,6 +59,7 @@ const MealSlot = ({ id, recipe }) => {
 
 // Main MealPlanner component
 const MealPlanner = ({recipeList}) => {
+  const [loading,setLoading] = useContext(LoadingContext)
  
   const [mealPlan,setMealPlan] = useContext(MealContext);
 
@@ -127,7 +129,7 @@ const MealPlanner = ({recipeList}) => {
       </Box>
 
       
-      <Grid2 sx={{margin:"20px",border:"2px solid #ddd",borderRadius:"2px",  padding: 2,boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)"}} container spacing={2}>
+      <Grid2 sx={{margin:"20px",border:"2px solid #ddd",borderRadius:"2px",  padding: 2,boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)"}} container spacing={5}>
         {mealPlan.map((day, dayIndex) => (
           <Grid2 item xs={12} sm={1.7} key={dayIndex}>
             <Typography variant="h6" align="center">Day {dayIndex + 1}</Typography>

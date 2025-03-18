@@ -1,9 +1,11 @@
-import { Button, Card, Modal, Typography } from "@mui/material";
+import { Box, Button, Card, CircularProgress, Modal, Typography } from "@mui/material";
 import { useState, useEffect, useContext } from "react";
 import { MealContext } from "./App";
+import axios from "axios";
 
 const HandleShoppingList = ({ recipesList }) => {
   const [open, setOpen] = useState(false);
+  const [loading,setLoading] = useState(false);
   const [shoppingList, setShoppinglist] = useState({});
   const [mealPlan,setMealPlan] = useContext(MealContext);
   const [copied,setCopied] = useState(false);
@@ -28,8 +30,6 @@ const HandleShoppingList = ({ recipesList }) => {
       setShoppinglist(updatedList);
       
     })
-    console.log("mealplan",mealPlan);
-    console.log("shoppinglist",Object.entries(shoppingList));
   },[mealPlan]);
 
 
@@ -74,6 +74,47 @@ const handleGmail = () => {
 //////////////////////////////////////////////////////////////////////////////////
 
 
+
+const listCondenseHandler = async()=>{
+  setOpen(true)
+  setLoading(true)
+
+  try {
+    const groceryArray = Object.entries(shoppingList).map(([name, { quantity, units }]) => ({
+      name,
+      quantity,
+      units,
+    }));
+  
+    const response = await axios.post("http://localhost:5000/api/diet/grocery",{groceryList:groceryArray})
+    setShoppinglist(response.data.condensedList)
+    setLoading(false)
+  } catch (error) {
+    console.log("modal:",error)
+  }
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -92,29 +133,33 @@ const handleGmail = () => {
       <Button
         variant="outlined"
         size="medium"
-        onClick={() => setOpen(true)}
+        onClick={listCondenseHandler}
       >
         Shopping List
       </Button>
       <Modal open={open} onClose={() => setOpen(false)}>
         <Card sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Shopping List
-          </Typography>
-          <Button onClick={handleCopy}>copy</Button>
-          <Button onClick={handleDownload}>download</Button>
-          <Button onClick={handleGmail}>gmail</Button>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            {Object.keys(shoppingList).length === 0 ? (
-              <p>No items in the shopping list.</p>
-            ) : (
-              Object.entries(shoppingList).map(([name, { quantity, units }]) => (
-                <div key={name}>
-                  {name}: {quantity} {units || ""}
-                </div>
-              ))
-            )}
-          </Typography>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Shopping List
+            </Typography>
+            <Button onClick={handleCopy}>copy</Button>
+            <Button onClick={handleDownload}>download</Button>
+            <Button onClick={handleGmail}>gmail</Button>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              {Object.keys(shoppingList).length === 0 ? (
+                <p>No items in the shopping list.</p>
+              ) : (
+                loading?<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center',}}><CircularProgress/></Box>:
+                <Box sx={{maxHeight:400,overflowY:"auto",'&::-webkit-scrollbar': { width: '8px',},'&::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(144, 202, 249, 0.3)', borderRadius: '4px', }}}>
+                  {Object.entries(shoppingList).map(([name, { quantity, units }]) => (
+                  <div key={name}>
+                    {name}: {quantity} {units || ""}
+                  </div>
+                ))}
+                </Box>
+                
+              )}
+            </Typography>
         </Card>
       </Modal>
     </div>

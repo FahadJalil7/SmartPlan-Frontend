@@ -33,7 +33,6 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
       const response = await Aichat({messages:input});
       if (response){setLoading(false)}
       if (response.length>2){
-        console.log("response to the function wit erthing",response)
         // Add AI's response to chat
         const aiMessage = { role: "assistant", content: response[0]};
         setMessages((prev) => [...prev, aiMessage]);
@@ -45,7 +44,7 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
       }else{setMessages((prev) => [...prev,  {role: "assistant", content: response[0]}   ]);}
     
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error at DietAi:", error);
     }
 
     
@@ -85,7 +84,7 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
 
 // Inline styles for basic styling
 const styles = {
-  container: { maxWidth: "500px", margin: "auto", padding: "20px", textAlign: "center", },
+  container: { margin:"20px",width:"50%", padding: "20px", textAlign: "center", },
   chatBox: { border: "1px solid #ddd", padding: "10px", minHeight: "150px", overflowY: "auto" },
   userMsg: { background: "#DCF8C6", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "right"},
   aiMsg: { background: "#E8E8E8", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "left" },

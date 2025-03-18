@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 
-const API_BASE_URL = "http://localhost:5000/api"; // Backend URL
+const API_BASE_URL = "https://smartplan-backend.onrender.com/api"; // Backend URL
 
 export const fetchRandomRecipes = async (number = 5) => {
   try {

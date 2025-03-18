@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Button from '@mui/material/Button';
-import { Box, TextField, Typography, ToggleButton } from '@mui/material';
+import { Box, TextField, Typography, ToggleButton, Drawer, Divider } from '@mui/material';
 import Stack from '@mui/material/Stack'
 import RecipeCard from './recipeCard';
 import MealPlanner from './imp2/mealplanner';
@@ -12,6 +12,11 @@ import Chat from './DietAi';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { SearchRecipesByIng } from './utiltyFunctions/SearchRecipesByIng';
+import { getRecipeInfo } from './utiltyFunctions/getRecipeInfo';
+import { getRecipeInfoBulk } from './utiltyFunctions/getRecipeInfoBulk';
+import mealdata from './utiltyFunctions/testMealplan.json'
+import RecipeCardSkeleton from './RecipeCardSkeleton';
+import { ProfileHandler } from './ProfileHandler';
 
 const darkTheme = createTheme({
   palette: {
@@ -22,7 +27,7 @@ const darkTheme = createTheme({
 
 
 function App() {
-  const [recipes,setRecipes] = useState([{"id":665744,"title":"Zucchini Flutes Piped With Basil Ricotta Mousse","ingredients":[{"name":"zucchini","amount":2,"unit":"medium"},{"name":"basil leaves - torn","amount":0.25,"unit":"cup"},{"name":"garlic","amount":2,"unit":"tablespoons"},{"name":"ricotta","amount":1.5,"unit":"cups"},{"name":"parmesan cheese","amount":4,"unit":"tablespoons"},{"name":"extra virgin olive oil","amount":1,"unit":"tablespoon"}],"link":"https://www.foodista.com/recipe/LZDJVWT5/zucchini-flutes-piped-with-basil-ricotta-mousse","image":"https://img.spoonacular.com/recipes/665744-556x370.jpg"},{"id":715432,"title":"Buffalo Ranch Chicken Dip","ingredients":[{"name":"chicken breasts","amount":4,"unit":""},{"name":"cream cheese","amount":16,"unit":"oz"},{"name":"green onions","amount":0.5,"unit":"cup"},{"name":"louisiana hot sauce","amount":12,"unit":"oz"},{"name":"paul prudhommes poultry seasoning","amount":7,"unit":"servings"},{"name":"ranch dressing","amount":16,"unit":"oz"},{"name":"sharp cheddar cheese","amount":8,"unit":"oz"}],"link":"https://www.pinkwhen.com/buffalo-ranch-chicken-dip/","image":"https://img.spoonacular.com/recipes/715432-556x370.jpg"},{"id":656723,"title":"Pork Carnitas Tacos","ingredients":[{"name":"water","amount":7,"unit":"cups"},{"name":"pork butt","amount":2,"unit":"pounds"},{"name":"garlic","amount":4,"unit":"cloves"},{"name":"sea salt and ground pepper","amount":8,"unit":"servings"},{"name":"olive oil","amount":1,"unit":"teaspoon"},{"name":"orange juice","amount":0.5,"unit":"cup"},{"name":"milk","amount":0.5,"unit":"cup"},{"name":"corn tortillas","amount":24,"unit":""},{"name":"salsa fresca","amount":8,"unit":"servings"},{"name":"avocado","amount":1,"unit":"slices"},{"name":"cilantro","amount":8,"unit":"servings"},{"name":"onion","amount":8,"unit":"servings"},{"name":"limes","amount":8,"unit":"servings"}],"link":"https://www.foodista.com/recipe/76ZPMZJN/pork-carnitas-tacos","image":"https://img.spoonacular.com/recipes/656723-556x370.jpg"}])
+  const [recipes,setRecipes] = useState([])
   const [mealPlan, setMealPlan] = useState(
       Array.from({ length: 7 }, () => ({
         breakfast: null,
@@ -30,28 +35,36 @@ function App() {
         dinner: null,
       }))
     );
+  
+ //const [mealPlan,setMealPlan] = useState(mealdata)
   const [Searchquery,SetSearchquery] = useState("");
   const [userSetting,setUserSetting] = useState(false);
   const [minCalories,setMinCalories] = useState(0);
   const [minCarbs,setMinCarbs] = useState(0);
   const [minProtein,setMinProtien] = useState(0);
+  const [loading,setLoading] = useState(false);
+  const [drawer,setDrawer] = useState(false);
 
   const handleShuffle = async function(){
     if(userSetting){
-      var data  = await SearchRecipesByIng(5,minCalories,minCarbs,minProtein);   
+      console.log('!!!')
+      var data  = await SearchRecipesByIng(8,minCalories,minCarbs,minProtein);   
     }else{
-      var data  = await fetchRandomRecipes(5);
+      var data  = await fetchRandomRecipes(8);
     }
       setRecipes([...data])
       console.log("Shuffle results:",data)
     
   }
 
-  const handleSearch = async function(Searchquery){
+  const handleSearch = async function(event){
+    const newSearchquery = event.target.value;
+    SetSearchquery(newSearchquery);
     if(userSetting){
-      var data = await SearchRecipesByIng(5,minCalories,minCarbs,minProtein);// this needs to have search query somehow
+      //var data = await SearchRecipesByIng(5,minCalories,minCarbs,minProtein);// this needs to have search query somehow
+      var data = await SearchRecipes(8,newSearchquery,minCalories,minCarbs,minProtein);
     }else{
-      var data = await SearchRecipes(5,Searchquery);
+      var data = await SearchRecipes(8,newSearchquery);
     }
     setRecipes([...data])
     console.log("Search results",data)
@@ -59,11 +72,14 @@ function App() {
 
   const handleRandomFill = async function(){
     if(userSetting){
+      setLoading(true)
       var data = await SearchRecipesByIng(21,minCalories,minCarbs,minProtein);
     }else{
+      setLoading(true)
        var data = await fetchRandomRecipes(21);
     }
     const temparr = [...data]; 
+    setLoading(false)
     setMealPlan((prev)=>{
       const plan = [...prev]; //i think this is unnessacery since we overwite anyway 
       for(let i=0;i<7;i++){
@@ -82,24 +98,32 @@ function App() {
     <availableRecipeContext.Provider value={[recipes,setRecipes]}>
       <ThemeProvider theme={darkTheme}>
       <CssBaseline></CssBaseline>
+      <Drawer open={drawer} onClose={()=>{setDrawer(false)}}><Box sx={{width:"200px"}}><ProfileHandler/></Box>
+      <Divider/>
+        <Box sx={{display:"flex",flexDirection:"column",maxWidth:"200px",padding:"10px"}}>
+          <TextField sx={{marginBlock:"5px"}} onChange={(e)=>{setMinCalories(e.target.value)}} value={minCalories} disabled={!userSetting} type='number' label="calories"></TextField>
+          <TextField sx={{marginBlock:"5px"}} onChange={(e)=>{setMinProtien(e.target.value)}} value={minProtein} disabled={!userSetting} type='number' label='protien'></TextField>
+          <TextField sx={{marginBlock:"5px"}} onChange={(e)=>{setMinCarbs(e.target.value)}} value={minCarbs} disabled={!userSetting} type='number' label='carbs'></TextField>
+          <ToggleButton sx={{marginBlock:"5px"}} selected={!userSetting} onChange={() => setUserSetting((prev) => !prev)}>Random</ToggleButton>
+        </Box>
+      </Drawer>
       <Box sx={{display:'flex',flexDirection:'row',justifyContent:"space-between", margin:"10px"}}>
         <Typography variant="h4" component={"h4"}> MealPanner</Typography>
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center"sx={{ maxWidth: 800 }}>
-          <TextField onChange={(e)=>{setMinCalories(e.target.value)}} value={minCalories} disabled={!userSetting} type='number' label="calories"></TextField>
-          <TextField onChange={(e)=>{setMinProtien(e.target.value)}} value={minProtein} disabled={!userSetting} type='number' label='protien'></TextField>
-          <TextField onChange={(e)=>{setMinCarbs(e.target.value)}} value={minCarbs} disabled={!userSetting} type='number' label='carbs'></TextField>
-          <ToggleButton selected={!userSetting} onChange={() => setUserSetting((prev) => !prev)}>Random</ToggleButton>
+          <Button variant="contained" onClick={()=>{setDrawer(true)}}>User Profile</Button>
           <HandleShoppingList recipesList={recipes}></HandleShoppingList>
           <Button variant='outlined' onClick={()=>handleShuffle()}>Shuffle Recipes</Button>
-          <TextField type='search' id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(Searchquery),SetSearchquery(event.target.value)}}/>
+          <TextField type='search' id="outlined-basic" label="Search Recipes" variant="outlined"  value={Searchquery} onChange={(event)=>{handleSearch(event)}}/>
           <Button variant='outlined' onClick={()=>handleRandomFill()}>Fill Mealplan</Button>
         </Stack> 
       </Box>
-      <Box>
-      <Chat setMinCalories={setMinCalories} setMinCarbs={setMinCarbs} setMinProtein={setMinProtien} setUserSetting={setUserSetting}></Chat>
-      <WeeklySummary></WeeklySummary>
+      <Box sx={{display:'flex', width:"100%",paddingTop:"15px" }}>
+        <Chat setMinCalories={setMinCalories} setMinCarbs={setMinCarbs} setMinProtein={setMinProtien} setUserSetting={setUserSetting}></Chat>
+        <WeeklySummary></WeeklySummary>
       </Box>
-      <MealPlanner recipeList={recipes}></MealPlanner>
+      <LoadingContext.Provider value={[loading,setLoading]}>
+        <MealPlanner recipeList={recipes}></MealPlanner>
+      </LoadingContext.Provider>
       </ThemeProvider>
     </availableRecipeContext.Provider> 
     </MealContext.Provider>
@@ -114,4 +138,5 @@ function App() {
 
 export const MealContext = React.createContext();
 export const availableRecipeContext = React.createContext();
+export const LoadingContext = React.createContext();
 export default App

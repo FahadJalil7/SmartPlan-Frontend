@@ -33,16 +33,21 @@ export default function WeeklySummary(){
 
     },[mealplan])
 
-    console.log(calories,carbs,protein)
+    
 
     return(
-        <Box>
+        <Box sx={{width:"50%",margin:"20px",marignBlockEnd:"30px"}}>
             <Typography variant="h5" gutterBottom>Weekly Nutrition Summary</Typography>
-            <Stack spacing={2} sx={{ flex: 1, maxWidth:500 }}>
-                <LinearProgress color="primary" variant="determinate" value={(calories / 14000) * 100 > 100 ? 100 : (calories / 14000) * 100}></LinearProgress>
-                <LinearProgress color="secondary" variant="determinate" value={(carbs / 1750) * 100 > 100 ? 100 : (carbs / 1750) * 100}></LinearProgress>
-                <LinearProgress color="success" variant="determinate" value={(protein / 350) * 100 > 100 ? 100 : (protein / 350) * 100}></LinearProgress>
+            <Stack spacing={2} sx={{ flex: 1}}>
+                <Typography sx={{margin:0}} variant="caption">Calories</Typography>
+                <LinearProgress color="primary" variant="determinate" value={(calories / 17000) * 100 > 100 ? 100 : (calories / 17000) * 100}></LinearProgress>
+                <Typography variant="caption">Carbs</Typography>
+                <LinearProgress color="secondary" variant="determinate" value={(carbs / 2150) * 100 > 100 ? 100 : (carbs / 2150) * 100}></LinearProgress>
+                <Typography variant="caption">Protein</Typography>
+                <LinearProgress color="success" variant="determinate" value={(protein / 500) * 100 > 100 ? 100 : (protein / 500) * 100}></LinearProgress>
+                <Typography variant="caption">Fat</Typography>
                 <LinearProgress color="warning" variant="determinate" value={(fat / 560) * 100 > 100 ? 100 : (fat / 560) * 100}></LinearProgress>
+            
             </Stack>
         </Box>
     )

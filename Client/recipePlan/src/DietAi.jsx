@@ -7,7 +7,7 @@ import { blue } from "@mui/material/colors";
 import {Typography} from "@mui/material";
 
 const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
-  const [messages, setMessages] = useState([{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"},{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"},{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"},{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"}]);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [loading,setLoading] = useState(false);
   const [recipe,setRecipes] = useContext(availableRecipeContext);

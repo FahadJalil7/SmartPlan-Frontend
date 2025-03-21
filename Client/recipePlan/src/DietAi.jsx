@@ -119,7 +119,7 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
 
 const styles = {
   container: { margin:"20px",width:"50%", padding: "20px", textAlign: "center",},
-  chatBox: { border: "1px solid #ddd", padding: "10px", maxHeight: "200px", overflowY: "auto",pr: 1,
+  chatBox: { border: "1px solid #ddd", padding: "10px",minHeight:"180px" ,maxHeight: "200px", overflowY: "auto",pr: 1,
     '&::-webkit-scrollbar': {
       width: '8px',
     },

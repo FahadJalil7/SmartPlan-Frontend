@@ -32,8 +32,8 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
 
 
 
-    if (boxRef.current) {
-      boxRef.current.scrollTop = boxRef.current.scrollHeight;
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
     
     const fetchResponse = async() =>{

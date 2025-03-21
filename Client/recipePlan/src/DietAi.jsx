@@ -11,40 +11,14 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
   const [input, setInput] = useState("");
   const [loading,setLoading] = useState(false);
   const [recipe,setRecipes] = useContext(availableRecipeContext);
+  const chatRef = useRef(null);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-    const chatRef = useRef(null);
-    
-
-    
+  
     const userMessage = { role: "user", content: input };
     setMessages([...messages, userMessage]);
     setInput("");
-    
-    /*
-    try {
-      
-      setLoading(true)
-      
-
-      const response = await Aichat({messages});
-      if (response){setLoading(false)}
-      if (response.length>2){
-        // Add AI's response to chat
-        const aiMessage = { role: "assistant", content: response[0]};
-        setMessages((prev) => [...prev, aiMessage]);
-        setRecipes([...response[1].data]);
-        setMinCalories(response[2]);
-        setMinCarbs(response[3]);
-        setMinProtein(response[4]);
-        setUserSetting(true);
-      }else{setMessages((prev) => [...prev,  {role: "assistant", content: response[0]}   ]);}
-    
-    } catch (error) {
-      console.error("Error at DietAi:", error);
-    }
-    */
     
   };
 

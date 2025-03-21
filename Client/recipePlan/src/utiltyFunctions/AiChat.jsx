@@ -8,7 +8,8 @@ export const Aichat = async ({messages}) => {
 
     
         try{
-            const response = await axios.post("https://smartplan-backend.onrender.com/api/diet/chat", {message: messages});
+            const response = await axios.post("https://smartplan-backend.onrender.com/api/diet/chat", {messages});
+            //const response = await axios.post("http://localhost:5000/api/diet/chat", {messages});
             if(response.data[1] == 0){
                 const minCalories = response.data[0].minCalorie;
                 const minProtein = response.data[0].minProtein;

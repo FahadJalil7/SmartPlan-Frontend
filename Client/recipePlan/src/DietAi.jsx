@@ -1,13 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import {LinearProgress} from "@mui/material";
+import {LinearProgress,Button,Box,} from "@mui/material";
 import { Aichat } from "./utiltyFunctions/AiChat";
 import { availableRecipeContext } from "./App";
 import { blue } from "@mui/material/colors";
 import {Typography} from "@mui/material";
 
 const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"},{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"},{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"},{role:"user", content:"blah blah blah"},{role:"assitant", content:"blah blah blah"}]);
   const [input, setInput] = useState("");
   const [loading,setLoading] = useState(false);
   const [recipe,setRecipes] = useContext(availableRecipeContext);
@@ -16,21 +16,18 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
     if (!input.trim()) return;
     
 
-    // Add user's message to chat
+    
     const userMessage = { role: "user", content: input };
     setMessages([...messages, userMessage]);
-    setInput("")
-
+    setInput("");
+    
+    /*
     try {
-      // Send request to Express API
+      
       setLoading(true)
-      /*
-      const response = await axios.post("http://localhost:5000/api/diet/chat", {
-        message: input,
-      });
-      */
+      
 
-      const response = await Aichat({messages:input});
+      const response = await Aichat({messages});
       if (response){setLoading(false)}
       if (response.length>2){
         // Add AI's response to chat
@@ -46,9 +43,46 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
     } catch (error) {
       console.error("Error at DietAi:", error);
     }
-
+    */
     
   };
+
+
+
+  useEffect(()=>{
+
+    if (messages.length === 0) return;
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role === "assistant") return; // Prevent duplicate API calls
+    
+    const fetchResponse = async() =>{
+      try {
+      
+        setLoading(true)
+        
+  
+        const response = await Aichat({messages});
+        if (response){setLoading(false)}
+        if (response.length>2){
+          // Add AI's response to chat
+          const aiMessage = { role: "assistant", content: response[0]};
+          setMessages((prev) => [...prev, aiMessage]);
+          setRecipes([...response[1].data]);
+          setMinCalories(response[2]);
+          setMinCarbs(response[3]);
+          setMinProtein(response[4]);
+          setUserSetting(true);
+        }else{setMessages((prev) => [...prev,  {role: "assistant", content: response[0]}   ]);}
+      
+      } catch (error) {
+        console.error("Error at DietAi:", error);
+      }
+
+    }
+    fetchResponse();
+  
+  },[messages]);
+
 
 
   const handlekeydown = (event) => {
@@ -58,16 +92,16 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.chatBox}>
+    <Box sx={styles.container}>
+      <Box sx={styles.chatBox}>
         {messages.map((msg, index) => (
           <div key={index} style={msg.role === "user" ? styles.userMsg : styles.aiMsg}>
             <Typography component={"h1"} sx={{color:'black'}}>{msg.content}</Typography>
           </div>
         ))}
-      </div>
+      </Box>
       {loading?<LinearProgress variant="indeterminate"></LinearProgress>:<></>}
-      <div style={styles.inputBox}>
+      <Box sx={styles.inputBox}>
         <input
           type="text"
           value={input}
@@ -76,16 +110,23 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
           placeholder="Type your message..."
           style={styles.input}
         />
-        <button onClick={sendMessage} style={styles.button}>Send</button>
-      </div>
-    </div>
+        <Button size="small" onClick={sendMessage} sx={styles.button}>Send</Button>
+      </Box>
+    </Box>
   );
 };
 
-// Inline styles for basic styling
+
 const styles = {
-  container: { margin:"20px",width:"50%", padding: "20px", textAlign: "center", },
-  chatBox: { border: "1px solid #ddd", padding: "10px", minHeight: "150px", overflowY: "auto" },
+  container: { margin:"20px",width:"50%", padding: "20px", textAlign: "center",},
+  chatBox: { border: "1px solid #ddd", padding: "10px", maxHeight: "200px", overflowY: "auto",pr: 1,
+    '&::-webkit-scrollbar': {
+      width: '8px',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgba(144, 202, 249, 0.3)',
+      borderRadius: '4px',
+    },},
   userMsg: { background: "#DCF8C6", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "right"},
   aiMsg: { background: "#E8E8E8", padding: "8px", borderRadius: "5px", margin: "5px", textAlign: "left" },
   inputBox: { display: "flex", marginTop: "10px" },

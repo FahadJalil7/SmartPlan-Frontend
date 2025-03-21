@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {LinearProgress,Button,Box,} from "@mui/material";
 import { Aichat } from "./utiltyFunctions/AiChat";
@@ -14,6 +14,7 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
 
   const sendMessage = async () => {
     if (!input.trim()) return;
+    const chatRef = useRef(null);
     
 
     
@@ -53,7 +54,13 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
 
     if (messages.length === 0) return;
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage.role === "assistant") return; // Prevent duplicate API calls
+    if (lastMessage.role === "assistant") return; 
+
+
+
+    if (boxRef.current) {
+      boxRef.current.scrollTop = boxRef.current.scrollHeight;
+    }
     
     const fetchResponse = async() =>{
       try {
@@ -93,7 +100,7 @@ const Chat = ({setMinCalories,setMinCarbs,setMinProtein,setUserSetting}) => {
 
   return (
     <Box sx={styles.container}>
-      <Box sx={styles.chatBox}>
+      <Box ref={chatRef} sx={styles.chatBox}>
         {messages.map((msg, index) => (
           <div key={index} style={msg.role === "user" ? styles.userMsg : styles.aiMsg}>
             <Typography component={"h1"} sx={{color:'black'}}>{msg.content}</Typography>
